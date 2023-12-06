@@ -125,7 +125,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #-------------------------------- rest api ---------------------------------------------------------
-ALLOWED_HOSTS = ALLOWED_HOSTS + ['*']
+ALLOWED_HOSTS = ALLOWED_HOSTS + ['*'] + ['simrankaur0520.pythonanywhere.com', 'localhost']
 INSTALLED_APPS = INSTALLED_APPS + ['apiApp','admin_apiApp','rest_framework','corsheaders',]
 MIDDLEWARE = MIDDLEWARE + ['corsheaders.middleware.CorsMiddleware',]
 
