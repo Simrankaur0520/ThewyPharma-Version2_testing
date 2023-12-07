@@ -13,3 +13,11 @@ tzdata==2021.5
 virtualenv==20.13.3
 virtualenv-clone==0.5.7
 whitenoise==6.0.0
+django-environ==0.9.0
+environ~=1.0
+numpy~=1.24.4
+pandas~=2.0.3
+Pillow~=10.1.0
+razorpay~=1.4.1
+python-dotenv~=1.0.0
+google-cloud-secret-manager==2.15.1

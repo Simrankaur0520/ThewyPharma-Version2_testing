@@ -12,22 +12,56 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+from urllib.parse import urlparse
+from pathlib import Path
+import io
+from google.cloud import secretmanager
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env(DEBUG=(bool, False))
+env_file = os.path.join(BASE_DIR, '.env')
+
+if os.path.isfile(env_file):
+    # read a local .env file
+    env.read_env(env_file)
+elif os.environ.get('GOOGLE_CLOUD_PROJECT', None):
+    # pull .env file from Secret Manager
+    project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.environ.get('SETTINGS_NAME', 'django_settings')
+    name = f'projects/{project_id}/secrets/{settings_name}/versions/latest'
+    payload = client.access_secret_version(name=name).payload.data.decode('UTF-8')
+
+    env.read_env(io.StringIO(payload))
+else:
+    raise Exception('No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-08xkcxeh)+dqs%d2bpbzdou7&)&6c8dh9h*n0vl-aelpdeo$ue'
+SECRET_KEY = env('SECRET_KEY')
+# SECRET_KEY = 'django-insecure-08xkcxeh)+dqs%d2bpbzdou7&)&6c8dh9h*n0vl-aelpdeo$ue'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+APPENGINE_URL = env('APPENGINE_URL', default=None)
+if APPENGINE_URL:
+    # ensure a scheme is present in the URL before it's processed.
+    if not urlparse(APPENGINE_URL).scheme:
+        APPENGINE_URL = f'https://{APPENGINE_URL}'
 
+    ALLOWED_HOSTS = [urlparse(APPENGINE_URL).netloc]
+    CSRF_TRUSTED_ORIGINS = [APPENGINE_URL]
+    SECURE_SSL_REDIRECT = True
+else:
+    ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -70,7 +104,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'thewy_pharma.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -80,7 +113,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -100,7 +132,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -111,7 +142,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -126,16 +156,13 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-#-------------------------------- rest api ---------------------------------------------------------
+# -------------------------------- rest api ---------------------------------------------------------
 ALLOWED_HOSTS = ALLOWED_HOSTS + ['*'] + ['simrankaur0520.pythonanywhere.com', 'localhost']
-INSTALLED_APPS = INSTALLED_APPS + ['apiApp','admin_apiApp','rest_framework','corsheaders',]
-MIDDLEWARE = MIDDLEWARE + ['corsheaders.middleware.CorsMiddleware',]
+INSTALLED_APPS = INSTALLED_APPS + ['apiApp', 'admin_apiApp', 'rest_framework', 'corsheaders', ]
+MIDDLEWARE = MIDDLEWARE + ['corsheaders.middleware.CorsMiddleware', ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
