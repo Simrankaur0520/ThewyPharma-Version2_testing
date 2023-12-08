@@ -71,10 +71,13 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
 ]
 
 MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -158,7 +161,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # -------------------------------- rest api ---------------------------------------------------------
 ALLOWED_HOSTS = ALLOWED_HOSTS + ['*'] + ['simrankaur0520.pythonanywhere.com', 'localhost', '104.154.120.253']
-INSTALLED_APPS = INSTALLED_APPS + ['apiApp', 'admin_apiApp', 'rest_framework', 'corsheaders', ]
+INSTALLED_APPS = INSTALLED_APPS + ['apiApp', 'admin_apiApp', 'rest_framework', 'corsheaders', 'thewy_pharma']
 MIDDLEWARE = MIDDLEWARE + ['corsheaders.middleware.CorsMiddleware', ]
 
 MEDIA_URL = '/media/'
