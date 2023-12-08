@@ -61,7 +61,7 @@ if APPENGINE_URL:
     CSRF_TRUSTED_ORIGINS = [APPENGINE_URL]
     SECURE_SSL_REDIRECT = True
 else:
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = []
 
 # Application definition
 
