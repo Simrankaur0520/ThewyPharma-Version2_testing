@@ -157,7 +157,7 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # -------------------------------- rest api ---------------------------------------------------------
-ALLOWED_HOSTS = ALLOWED_HOSTS + ['*'] + ['simrankaur0520.pythonanywhere.com', 'localhost']
+ALLOWED_HOSTS = ALLOWED_HOSTS + ['*'] + ['simrankaur0520.pythonanywhere.com', 'localhost', '104.154.120.253']
 INSTALLED_APPS = INSTALLED_APPS + ['apiApp', 'admin_apiApp', 'rest_framework', 'corsheaders', ]
 MIDDLEWARE = MIDDLEWARE + ['corsheaders.middleware.CorsMiddleware', ]
 
