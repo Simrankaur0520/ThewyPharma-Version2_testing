@@ -1,5 +1,7 @@
-from django.urls import path
-import apiApp.views as views 
+from django.urls import path, re_path
+from django.views.static import serve
+
+import apiApp.views as views
 import apiApp.test_code as t_views
 
 from django.conf.urls.static import static
@@ -11,6 +13,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+                re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
                 path('write_data',views.landing_page,name='landing_page'),
                 path('single_product_view',views.single_product_view,name='single_product_view'),
                 path('categoryPage',views.categoryPage,name='categoryPage'),
