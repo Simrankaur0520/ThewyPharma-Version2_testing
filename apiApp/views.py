@@ -417,42 +417,49 @@ def CartUpdate(request):
     update_type = data['update_type']
     token = data['token']
     no_login_token = data['no_login_token']
-    try:
-        user = user_data.objects.get(token = token)
-        user_id = user.id
-        cartItems = user_cart.objects.filter(user_id = user_id)
-    except:
-        no_user = noLoginUser.objects.get(token = no_login_token)
-        no_login_id = no_user.id
-        cartItems = user_cart.objects.filter(no_login_id = no_login_id)
-    
-    cart_row = cartItems.filter(product_id=product_id,size=size)
-    quantity = int(cart_row.values_list('quantity',flat=True)[0])
-    
-    if update_type == '+':
-        cart_row.update(quantity = str(quantity + 1))
-        res = {
-                'status':True,
-                'message':'Quantity increased successfully'
-              }
-    elif update_type == '-':
-        if quantity > 1:
-            cart_row.update(quantity = str(quantity - 1))
+    try :
+        try:
+            user = user_data.objects.get(token = token)
+            user_id = user.id
+            cartItems = user_cart.objects.filter(user_id = user_id)
+        except:
+            no_user = noLoginUser.objects.get(token = no_login_token)
+            no_login_id = no_user.id
+            cartItems = user_cart.objects.filter(no_login_id = no_login_id)
+        
+        cart_row = cartItems.filter(product_id=product_id,size=size)
+        quantity = int(cart_row.values_list('quantity',flat=True)[0])
+        
+        if update_type == '+':
+            cart_row.update(quantity = str(quantity + 1))
             res = {
                     'status':True,
-                    'message':'Quantity decreased successfully'
-                  }
+                    'message':'Quantity increased successfully'
+                }
+        elif update_type == '-':
+            if quantity > 1:
+                cart_row.update(quantity = str(quantity - 1))
+                res = {
+                        'status':True,
+                        'message':'Quantity decreased successfully'
+                    }
+            else:
+                cart_row.delete()
+                res = {
+                        'status':True,
+                        'message':'Item removed from cart'
+                    }
         else:
-            cart_row.delete()
             res = {
-                    'status':True,
-                    'message':'Item removed from cart'
-                  }
-    else:
+                        'status':False,
+                        'message':'Something went wrong'
+            }
+    except:
         res = {
-                    'status':False,
-                    'message':'Something went wrong'
-                  }
+                        'status':False,
+                        'message':'Something went wrong'
+            }
+        
     return Response(res)
 
 @api_view(['POST'])
