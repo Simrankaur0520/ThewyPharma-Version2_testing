@@ -132,15 +132,15 @@ class noLoginUser(models.Model):
     token = models.TextField(blank=True)
 
 
-# class PaymentOrder(models.Model):
-#     order_product = models.TextField()
-#     order_amount = models.TextField()
-#     order_payment_id = models.TextField()
-#     isPaid = models.BooleanField(default=False)
-#     order_date = models.TextField(default=str(datetime.now(pytz.timezone("Asia/Kolkata"))))
-#     user_id=models.TextField(null=True)
-#     order_status = models.TextField(blank = True) #placed > processed > dispatched > on the way > delivered
-#     admin_placed_status = models.BooleanField(default=False)
+class PaymentOrder(models.Model):
+    order_product = models.TextField()
+    order_amount = models.TextField()
+    order_payment_id = models.TextField()
+    isPaid = models.BooleanField(default=False)
+    order_date = models.TextField(default=str(datetime.now(pytz.timezone("Asia/Kolkata"))))
+    user_id=models.TextField(null=True)
+    order_status = models.TextField(blank = True) #placed > processed > dispatched > on the way > delivered
+    admin_placed_status = models.BooleanField(default=False)
 
 
 class doctor_info(models.Model):
