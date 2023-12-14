@@ -41,7 +41,7 @@ from apiApp.models import images_and_banners
 from apiApp.models import blogs
 from apiApp.models import categoryy
 from apiApp.models import noLoginUser
-from apiApp.models import PaymentOrder
+# from apiApp.models import PaymentOrder
 from apiApp.models import cart_notification
 
 # -------------------------- admin model ---------------------------------------------
