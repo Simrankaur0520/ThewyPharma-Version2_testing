@@ -301,6 +301,7 @@ def add_to_cart(request):
                 'no_login_token':no_login_token,
                 'message':'Product added successfully'
               }
+    print("Before print...")
     return Response(res)
     
 
