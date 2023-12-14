@@ -247,12 +247,14 @@ def add_to_cart(request):
     # print('###########',no_login_token)
     # print('###########token',token)
     no_user_flag = False
+    print("Before product data.")
     if not Product_data.objects.filter(id = product_id).values().last()['status']:
         res = {
                 'status':False,
                 'message':'Product not available'
               }
         return Response(res)
+    print("After product data.")
     try:
         user = user_data.objects.get(token = token)
         user_id = user.id
