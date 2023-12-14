@@ -258,7 +258,9 @@ def add_to_cart(request):
     try:
         user = user_data.objects.get(token = token)
         user_id = user.id
+        print("inside user data.")
     except:
+        print("error user data.")
         no_user_flag = True
         if no_login_token == 'null' or noLoginUser.objects.filter(token = no_login_token).count() == 0:
             data = noLoginUser(token='token')
