@@ -254,30 +254,30 @@ def add_to_cart(request):
     # print('###########',no_login_token)
     # print('###########token',token)
     no_user_flag = False
-    print("Before product data.")
     if not Product_data.objects.filter(id = product_id).values().last()['status']:
         res = {
                 'status':False,
                 'message':'Product not available'
               }
         return Response(res)
-    print("After product data.")
     try:
         user = user_data.objects.get(token = token)
         user_id = user.id
-        print("inside user data.")
     except:
-        print("error user data.")
-        no_user_flag = True
-        if no_login_token == 'null' or noLoginUser.objects.filter(token = no_login_token).count() == 0:
-            data = noLoginUser(token='token')
-            data.save()
-            new_id = str(data.id)
-            noLoginUser.objects.filter(id = new_id).update(token = make_password(new_id))
-            no_login_token = noLoginUser.objects.filter(id = new_id).values_list('token',flat=True)[0]
-        else:
-            no_login_token = no_login_token
-        no_login_id = noLoginUser.objects.filter(token = no_login_token).values_list('id',flat=True)[0]
+        try:
+            no_user_flag = True
+            if no_login_token == 'null' or noLoginUser.objects.filter(token = no_login_token).count() == 0:
+                data = noLoginUser(token='token')
+                data.save()
+                new_id = str(data.id)
+                noLoginUser.objects.filter(id = new_id).update(token = make_password(new_id))
+                no_login_token = noLoginUser.objects.filter(id = new_id).values_list('token',flat=True)[0]
+            else:
+                no_login_token = no_login_token
+            no_login_id = noLoginUser.objects.filter(token = no_login_token).values_list('id',flat=True)[0]
+        except Exception:
+            traceback.print_exc()
+
     if no_user_flag == True:
         data = user_cart(
                             product_id = product_id,
