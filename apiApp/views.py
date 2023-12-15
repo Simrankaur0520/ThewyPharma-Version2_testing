@@ -225,7 +225,9 @@ def NavbarCategoryView(request):
 
 @api_view(['GET'])
 def search_bar(request):
+    print("Before product")
     products = Product_data.objects.exclude(status = False).values('id','title','category','image')
+    print("After product")
     def getCategoryName(x):
         return categoryy.objects.filter(id = x).values_list('category',flat=True)[0]
     def getSingleImage(x):
