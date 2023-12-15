@@ -232,9 +232,13 @@ def search_bar(request):
         return categoryy.objects.filter(id = x).values_list('category',flat=True)[0]
     def getSingleImage(x):
         return x.split(',')[0]
+    print(type(products))
     products = pd.DataFrame(products)
+    print("After product 3")
     products['category'] = products['category'].apply(getCategoryName)
+    print("After product 4")
     products['image'] = products['image'].apply(getSingleImage)
+    print("After product 5")
     res = products.to_dict(orient='records')
     return Response(res)
 
