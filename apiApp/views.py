@@ -234,7 +234,7 @@ def search_bar(request):
         return x.split(',')[0]
     print(type(products))
     products = pd.DataFrame(products)
-    print("After product 3")
+    print(products.head(5))
     products['category'] = products['category'].apply(getCategoryName)
     print("After product 4")
     products['image'] = products['image'].apply(getSingleImage)
