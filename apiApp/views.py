@@ -1,5 +1,6 @@
+from apiApp.models import PaymentOrder
 from import_statements import *
-
+import traceback
 #Putting data into database
 
 @api_view(['POST'])
@@ -233,14 +234,18 @@ def search_bar(request):
     def getSingleImage(x):
         return x.split(',')[0]
     print(type(products))
-    products = pd.DataFrame(products)
-    print(products.head(5))
-    products['category'] = products['category'].apply(getCategoryName)
-    print("After product 4")
-    products['image'] = products['image'].apply(getSingleImage)
-    print("After product 5")
-    res = products.to_dict(orient='records')
-    return Response(res)
+    try:
+        products = pd.DataFrame(products)
+        print(products.head(5))
+        products['category'] = products['category'].apply(getCategoryName)
+        print("After product 4")
+        products['image'] = products['image'].apply(getSingleImage)
+        print("After product 5")
+        res = products.to_dict(orient='records')
+        return Response(res)
+    except Exception:
+        traceback.print_exc()
+
 
 @api_view(['POST'])
 def add_to_cart(request):
